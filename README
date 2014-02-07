@@ -1,151 +1,85 @@
-Appcelerator Titanium iPhone Module Project
-===========================================
+you can not directly open XIB from Titanium module but below is Hack
 
-This is a skeleton Titanium Mobile iPhone module project.  Modules can be 
-used to extend the functionality of Titanium by providing additional native
-code that is compiled into your application at build time and can expose certain
-APIs into JavaScript. 
+Create Titanium mobile Project 
 
-MODULE NAMING
---------------
+Add New view controller named  ComPdfreaderViewController
 
-Choose a unique module id for your module.  This ID usually follows a namespace
-convention using DNS notation.  For example, com.appcelerator.module.test.  This
-ID can only be used once by all public modules in Titanium.
+so your 
+ComPdfreaderViewController.h
+ComPdfreaderViewController.m
+ComPdfreaderViewController.xib will there
 
+in yourmodulemodule.h
 
-COMPONENTS
------------
+-(void)OpenNewWin:(id)args;
 
-Components that are exposed by your module must follow a special naming convention.
-A component (widget, proxy, etc) must be named with the pattern:
+in yourmodulemodule.m
 
-	Ti<ModuleName><ComponentName>Proxy
+import below file
 
-For example, if you component was called Foo, your proxy would be named:
+#import "TiApp.h"
 
-	TiMyfirstFooProxy
-	
-For view proxies or widgets, you must create both a view proxy and a view implementation. 
-If you widget was named proxy, you would create the following files:
+// This is comtrollerr that you want to open with .XIB
+#import "ComPdfreaderViewController.h"
 
-	TiMyfirstFooProxy.h
-	TiMyfirstFooProxy.m
-	TiMyfirstFoo.h
-	TiMyfirstFoo.m
-	
-The view implementation is named the same except it does contain the suffix `Proxy`.  
-
-View implementations extend the Titanium base class `TiUIView`.  View Proxies extend the
-Titanium base class `TiUIViewProxy` or `TiUIWidgetProxy`.  
-
-For proxies that are simply native objects that can be returned to JavaScript, you can 
-simply extend `TiProxy` and no view implementation is required.
+and metohd of .h is like 
 
 
-GET STARTED
-------------
 
-1. Edit manifest with the appropriate details about your module.
-2. Edit LICENSE to add your license details.
-3. Place any assets (such as PNG files) that are required in the assets folder.
-4. Edit the titanium.xcconfig and make sure you're building for the right Titanium version.
-5. Code and build.
+-(void)OpenNewWin:(id)args
+{
+    ComPdfreaderViewController *viewcontroller = [[ComPdfreaderViewController alloc]initWithNibName:@"ComPdfreaderViewController" bundle:nil];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewcontroller];
+    
+    [[TiApp app]showModalController:nav animated:YES];
+}
 
-BUILD TIME COMPILER CONFIG
---------------------------
+Build module and add to your Proejct and app.js or (index.js if alloy)
 
-You can edit the file `module.xcconfig` to include any build time settings that should be
-set during application compilation that your module requires.  This file will automatically get `#include` in the main application project.  
+var myTestModule = require('com.testmodule');
 
-For more information about this file, please see the Apple documentation at:
+var btn = Titanium.UI.createButton({
+	top : 10,
+	left : 10,
+	height : 30,
+	title : 'Open Win from Module'
+});
+$.index.add(btn);
 
-<http://developer.apple.com/mac/library/documentation/DeveloperTools/Conceptual/XcodeBuildSystem/400-Build_Configurations/build_configs.html>
+btn.addEventListener('click', function(e) {
+	myTestModule.openNavWin();
+});
 
-
-DOCUMENTATION FOR YOUR MODULE
------------------------------
-
-You should provide at least minimal documentation for your module in `documentation` folder using the Markdown syntax.
-
-For more information on the Markdown syntax, refer to this documentation at:
-
-<http://daringfireball.net/projects/markdown/>
+$.index.open();
 
 
-TEST HARNESS EXAMPLE FOR YOUR MODULE
-------------------------------------
+if you run this it will show exception 
 
-The `example` directory contains a skeleton application test harness that can be 
-used for testing and providing an example of usage to the users of your module.
+NSInternalInconsistencyException
 
+Problem is your XIB is not in the project resources 
 
-INSTALL YOUR MODULE
---------------------
+if you take new project in x-code and and any view controller wiht .xib and if you run your project than from 
+iPhoneSimulator > version > <projectName> > <ApplicationPackage>
 
-1. Run `build.py` which creates your distribution
-2. cd to `/Library/Application Support/Titanium`
-3. copy this zip file into the folder of your Titanium SDK
+right click on it and show Packgae Content you can see the All XIB with .NIB extention are there 
 
-REGISTER YOUR MODULE
----------------------
+but in the case of your Module project if you run it in x-code than even if you took XIB it will not generate NIB 
 
-Register your module with your application by editing `tiapp.xml` and adding your module.
-Example:
+How to run Module project in xcode 
+-open terminal
+-move to your Module proejct directory
+-/Users/<yourname>/Library/Application\ Support/Titanium/mobilesdk/osx/3.2.0.GA/titanium.py run
 
-<modules>
-	<module version="0.1">com.testmodule</module>
-</modules>
+so the Idea is
 
-When you run your project, the compiler will know automatically compile in your module
-dependencies and copy appropriate image assets into the application.
+Take any Sample project in X-code and import the .h .m and .Xib file in that from your Titanium module Project 
+-Run your Sample project in x-code 
+-From right click on package and show package content and take your XIB 
+- Paste it in to your Assest folder if Alloy and if not /Resource/iphone
 
-USING YOUR MODULE IN CODE
--------------------------
-
-To use your module in code, you will need to require it. 
-
-For example,
-
-	var my_module = require('com.testmodule');
-	my_module.foo();
-
-WRITING PURE JS NATIVE MODULES
-------------------------------
-
-You can write a pure JavaScript "natively compiled" module.  This is nice if you
-want to distribute a JS module pre-compiled.
-
-To create a module, create a file named com.testmodule.js under the assets folder.
-This file must be in the Common JS format.  For example:
-
-	exports.echo = function(s)
-	{
-		return s;
-	};
-	
-Any functions and properties that are exported will be made available as part of your
-module.  All other code inside your JS will be private to your module.
-
-For pure JS module, you don't need to modify any of the Objective-C module code. You
-can leave it as-is and build.
-
-TESTING YOUR MODULE
--------------------
-
-Run the `titanium.py` script to test your module or test from within XCode.
-To test with the script, execute:
-
-	titanium run --dir=YOURMODULEDIR
-	
-
-This will execute the app.js in the example folder as a Titanium application.
+Clean project and run ....
 
 
-DISTRIBUTING YOUR MODULE
--------------------------
-
-Currently, you will need to manually distribution your module distribution zip file directly. However, in the near future, we will make module distribution and sharing built-in to Titanium Developer and in the Titanium Marketplace!
 
 
-Cheers!
