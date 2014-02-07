@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0
+apiversion: 2
+description: My module
+author: jayesh
+license: Specify your license
+copyright: © Jayesh
+
+
+# these should not be edited
+name: TestModuleiPhone
+moduleid: com.testmodule
+guid: b6a089a3-e8d4-4db3-b4ae-8cf4bc2d41aa
+platform: iphone
+minsdk: 3.2.0.GA
