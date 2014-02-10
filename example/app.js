@@ -1,41 +1,15 @@
-// This is a test harness for your module
-// You should do something interesting in this harness 
-// to test out the module and to provide instructions 
-// to users on how to use it by example.
+var myTestModule = require('com.testmodule');
 
-
-// open a single window
-var win = Ti.UI.createWindow({
-	backgroundColor:'white'
+var btn = Titanium.UI.createButton({
+	top : 10,
+	left : 10,
+	height : 30,
+	title : 'Open Win from Module'
 });
-var label = Ti.UI.createLabel();
-win.add(label);
-win.open();
+$.index.add(btn);
 
-//jayesh
+btn.addEventListener('click', function(e) {
+	myTestModule.openNavWin();
+});
 
-// TODO: write your module tests here
-var TestModuleiPhone = require('com.testmodule');
-Ti.API.info("module is => " + TestModuleiPhone);
-
-label.text = TestModuleiPhone.example();
-
-Ti.API.info("module exampleProp is => " + TestModuleiPhone.exampleProp);
-TestModuleiPhone.exampleProp = "This is a test value";
-
-if (Ti.Platform.name == "android") {
-	var proxy = TestModuleiPhone.createExample({
-		message: "Creating an example Proxy",
-		backgroundColor: "red",
-		width: 100,
-		height: 100,
-		top: 100,
-		left: 150
-	});
-
-	proxy.printMessage("Hello world!");
-	proxy.message = "Hi world!.  It's me again.";
-	proxy.printMessage("Hello world!");
-	win.add(proxy);
-}
-
+$.index.open();
