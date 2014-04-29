@@ -69,7 +69,7 @@ but in the case of your Module project if you run it in x-code than even if you 
 How to run Module project in xcode 
 -open terminal
 -move to your Module proejct directory
--/Users/<yourname>/Library/Application\ Support/Titanium/mobilesdk/osx/3.2.0.GA/titanium.py run
+-~/Library/Application\ Support/Titanium/mobilesdk/osx/3.2.0.GA/titanium.py run
 
 so the Idea is
 
